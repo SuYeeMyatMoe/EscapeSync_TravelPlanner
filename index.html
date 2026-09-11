@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function() {
+        try {
+          if (typeof window !== 'undefined' && 'fetch' in window) {
+            var _nativeFetch = window.fetch;
+            var _activeFetch = function() {
+              return _nativeFetch.apply(window, arguments);
+            };
+            var desc = Object.getOwnPropertyDescriptor(window, 'fetch') ||
+                       (window.Window && Object.getOwnPropertyDescriptor(window.Window.prototype, 'fetch'));
+            if (!desc || !desc.set || desc.writable === false) {
+              try {
+                Object.defineProperty(window, 'fetch', {
+                  get: function() { return _activeFetch; },
+                  set: function(v) { _activeFetch = v; },
+                  configurable: true,
+                  enumerable: true
+                });
+              } catch (e1) {
+                if (window.Window && window.Window.prototype) {
+                  try {
+                    Object.defineProperty(window.Window.prototype, 'fetch', {
+                      get: function() { return _activeFetch; },
+                      set: function(v) { _activeFetch = v; },
+                      configurable: true,
+                      enumerable: true
+                    });
+                  } catch (e2) {}
+                }
+              }
+            }
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <title>EscapeSync — Plan the adventure. Survive the unexpected.</title>
+    <meta name="description" content="EscapeSync is an intelligent group travel resilience platform that creates shared plans and prepares Plans B, C, and D using Rescue Mode when disruptions occur." />
+    <meta property="og:title" content="EscapeSync — Plan the adventure. Survive the unexpected." />
+    <meta property="og:description" content="EscapeSync is an intelligent group travel resilience platform that creates shared plans and prepares Plans B, C, and D using Rescue Mode when disruptions occur." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" href="/landing-pages/travel-assets/backgrounds/kl-sentral-night.webp" as="image" type="image/webp" fetchpriority="high">
+    <link rel="prefetch" href="/landing-pages/kage.html" as="document">
+  </head>
+  <body class="bg-[#050A0D] text-[#F8FAFC]">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

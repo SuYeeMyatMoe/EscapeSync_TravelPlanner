@@ -1,0 +1,6 @@
+{
+  "name": "EscapeSync",
+  "description": "EscapeSync is an intelligent group travel resilience platform that creates shared plans and prepares Plans B, C, and D using Rescue Mode when disruptions occur.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
