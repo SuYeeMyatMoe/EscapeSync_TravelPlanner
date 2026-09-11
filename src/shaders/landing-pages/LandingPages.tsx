@@ -15,7 +15,7 @@ export function KageLandingPage(props: LandingPageProps & PageTypographyProps) {
     <LandingPageFrame
       {...frame}
       customization={customization}
-      title="EscapeSync — Plan the adventure. Survive the unexpected."
+      title="EscapeSync — Plan the adventure. Prepare for anything."
       sourceUrl="/landing-pages/kage.html"
       className={`w-full h-full ${frame.className || ''}`}
       style={{ width: "100%", height: "100%", minHeight: "100%", ...frame.style }}
