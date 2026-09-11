@@ -349,22 +349,31 @@ const MANROPE: PageFont = {
   stack: "'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 };
 
+const BRICOLAGE_GROTESQUE: PageFont = {
+  value: "bricolage-grotesque",
+  label: "Bricolage Grotesque",
+  stack: "'Bricolage Grotesque', 'Geist', system-ui, sans-serif",
+};
+
 /* ── Kage ────────────────────────────────────────────────────────────────
    Two display scales, .h-hero and .h-sec, both clamped. The control drives
-   the hero ceiling and the section ceiling follows at its authored 60/46.
+   the hero ceiling and the section ceiling follows at its authored 70/60.
+   The page carries Bricolage Grotesque for display and Geist for reading —
+   both fetched by the document itself, so neither needs a google spec here.
    Headings carrying .jp are left out: that class selects the Japanese face,
-   and it would lose the cascade to a bare element selector. */
+   and it would lose the cascade to a bare element selector. The mono voice
+   (.eyebrow, .num, keys and tags) is the page's own and is not restated. */
 export const KAGE_TYPOGRAPHY: PageTypographyRecipe = {
-  headingFonts: [SPACE_GROTESK, GEIST],
-  bodyFonts: [SPACE_GROTESK, GEIST],
-  headingWeights: ["400", "500", "600", "700"],
-  headingWeight: "600",
+  headingFonts: [BRICOLAGE_GROTESQUE, GEIST_LOADED],
+  bodyFonts: [GEIST_LOADED, BRICOLAGE_GROTESQUE],
+  headingWeights: ["500", "600", "700", "800"],
+  headingWeight: "700",
   bodyWeights: ["300", "400", "500", "600"],
   bodyWeight: "400",
   primaryColor: "#DFFF00",
-  headingSize: [30, 46, 72],
-  bodySize: [13, 17, 24],
-  headingLetterSpacing: [-0.04, -0.012, 0.08],
+  headingSize: [40, 60, 88],
+  bodySize: [13, 18, 24],
+  headingLetterSpacing: [-0.05, -0.028, 0.06],
   css: (type) => `
 :root {
   --ink: #050B0D;
@@ -372,23 +381,25 @@ export const KAGE_TYPOGRAPHY: PageTypographyRecipe = {
   --bone: #F1F7F4;
   --bone-dim: #9EB2A8;
   --muted: #5D7268;
-  --line: rgba(223, 255, 0, 0.18);
-  --line-soft: rgba(0, 229, 212, 0.12);
+  --line: rgba(223, 255, 0, 0.22);
+  --line-soft: rgba(0, 229, 212, 0.15);
   --vermilion: ${type.primary};
   --ember: #00E5D4;
   --gold: #DFFF00;
+  --font-display: ${type.heading};
+  --font-body: ${type.body};
 }
 body { font-family: ${type.body}; }
-body, .body, .body-lg, .num { font-weight: ${type.bodyWeight}; }
+body, .body, .body-lg { font-weight: ${type.bodyWeight}; }
 h1:not(.jp), h2:not(.jp), h3:not(.jp), .display:not(.jp) {
   font-family: ${type.heading};
   font-weight: ${type.headingWeight};
 }
 .display { letter-spacing: ${type.headingLetterSpacing}em; }
-.h-hero { font-size: clamp(26px, 3.05vw, ${px(type.headingSize)}); }
-.h-sec { font-size: clamp(30px, 4vw, ${px((type.headingSize * 60) / 46)}); }
-.body-lg { font-size: clamp(14px, 1.02vw, ${px(type.bodySize)}); }
-.body { font-size: ${px(Math.max(11, type.bodySize - 3))}; }
+.h-hero { font-size: clamp(34px, 3.7vw, ${px(type.headingSize)}); }
+.h-sec { font-size: clamp(34px, 4.4vw, ${px((type.headingSize * 70) / 60)}); }
+.body-lg { font-size: clamp(15px, 1.08vw, ${px(type.bodySize)}); }
+.body { font-size: ${px(Math.max(11, type.bodySize - 3.5))}; }
 `,
 };
 
