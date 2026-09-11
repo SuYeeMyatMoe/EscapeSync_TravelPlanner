@@ -5187,6 +5187,22 @@ const JOBS = [
     layoutWord(); measure();
     /* nothing that casts a shadow ever moves, so bake it once */
     if (WANT_SHADOW && WORLD.key) { WORLD.key.shadow.autoUpdate = false; WORLD.key.shadow.needsUpdate = true; }
+  }],
+  ['Loading hero texture', () => {
+    return new Promise((resolve) => {
+      if (window.loadSceneTexture) {
+        window.loadSceneTexture(0);
+        const checkLoaded = setInterval(() => {
+          if (WORLD.travelTextures[0] && WORLD.travelTextures[0].status === 'loaded') {
+            clearInterval(checkLoaded);
+            resolve();
+          }
+        }, 50);
+        setTimeout(() => { clearInterval(checkLoaded); resolve(); }, 3000);
+      } else {
+        resolve();
+      }
+    });
   }]
 ];
 
@@ -5195,7 +5211,7 @@ function boot() {
   wireReveals(); wireForegroundStages(); wireNav(); wireHeroExit(); wireFocus(); wireCursor();
   document.body.classList.add('is-locked');
 
-  // Defensive watchdog: if any asset stalls, force preloader dismissal after 900ms
+  // Defensive watchdog: if any asset stalls, force preloader dismissal after 5000ms
   const watchdog = setTimeout(() => {
     if (preEl && !preEl.classList.contains('done')) {
       console.warn('[kage] watchdog timeout reached: revealing page content');
@@ -5203,7 +5219,7 @@ function boot() {
       document.body.classList.remove('is-locked');
       $$('[data-rv], .mask-line').forEach(e => e.classList.add('rv-in'));
     }
-  }, 900);
+  }, 5000);
 
   let i = 0;
   const step = () => {
