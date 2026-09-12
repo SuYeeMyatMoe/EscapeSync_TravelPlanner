@@ -1092,10 +1092,10 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
   </a>
   <div class="nav-actions">
     <span class="nav-status" aria-hidden="true"><i></i>Engine live</span>
-    <button class="nav-btn-start" id="nav-start-planning" data-cursor>
+    <a href="/pages/EscapeSync Phase 2.html" class="nav-btn-start" id="nav-start-planning" data-cursor style="display:inline-flex;align-items:center;gap:10px;text-decoration:none">
       <span>Start planning</span>
       <span class="btn-orb"><svg viewBox="0 0 14 14" fill="none" class="nav-btn-icon"><path d="M3 11 11 3M5 3h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    </button>
+    </a>
   </div>
 </header>
 
@@ -1253,7 +1253,7 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
   <div class="eyebrow" data-rv="fade">Chapter 04 — Command Center</div>
   <h2 class="display" data-rv="up">Ready for <span class="accent">anything.</span></h2>
   <p class="body-lg" data-rv="up">Step into the live Command Center: run the disruption simulator, walk the 3D elevation map, tune the crew sliders — and travel knowing the fallback is already built.</p>
-  <a class="cta" href="#launch-command" id="launch-cta" data-rv="fade" data-cursor>
+  <a class="cta" href="/pages/EscapeSync Phase 2.html" id="launch-cta" data-rv="fade" data-cursor>
     <i></i><span>Launch Command Center</span>
     <span class="ar"><svg viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="#050B0D" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
   </a>
@@ -5294,14 +5294,12 @@ function start() {
     const text = (t.textContent || '').trim().toLowerCase();
     if (t.id === 'nav-start-planning' || text.includes('start planning')) {
       e.preventDefault();
-      const target = $('#gate') || $('#pathways');
-      if (target) target.scrollIntoView({ behavior: 'smooth' });
+      window.location.href = '/pages/EscapeSync Phase 2.html';
       return;
     }
     if (href === '#launch-command' || text.includes('command center') || text.includes('launch command')) {
       e.preventDefault();
-      const target = $('#gate') || $('#pathways');
-      if (target) target.scrollIntoView({ behavior: 'smooth' });
+      window.location.href = '/pages/EscapeSync Phase 2.html';
       return;
     } else if (text.includes('rescue protocol') || text.includes('rescue mode')) {
       e.preventDefault();
