@@ -1,9 +1,10 @@
 # EscapeSync by Code Benders
 
 **Team:** Code Benders  
-**Problem statement:** Travel Planner (Lifestyle: Planning an Escape)  
-**UI prototype:** https://escapesync.vercel.app/
+**Problem statement:** Travel Planner (Lifestyle: Planning an Escape)
 ---
+![EscapeSync Overview](Demo_Images/LandingPage.png)
+**UI prototype**: https://escapesync.vercel.app/  
 
 ## 1. Project Overview
 
