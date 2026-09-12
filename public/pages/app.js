@@ -21,6 +21,8 @@
   });
 
   const DEFAULT_STATE = Object.freeze({
+    tripType: null,
+    purpose: 'Date',
     origin: 'Kuala Lumpur',
     destination: 'Melaka',
     startDate: 'Fri, 12 Sep 2026',
@@ -59,6 +61,8 @@
   function normalizeState(input) {
     const value = input && typeof input === 'object' ? input : {};
     return {
+      tripType: value.tripType === 'local' || value.tripType === 'foreign' ? value.tripType : null,
+      purpose: cleanText(value.purpose, DEFAULT_STATE.purpose),
       origin: cleanText(value.origin, DEFAULT_STATE.origin),
       destination: cleanText(value.destination, DEFAULT_STATE.destination),
       startDate: cleanText(value.startDate, DEFAULT_STATE.startDate),
@@ -223,7 +227,7 @@
     const go = (routeName, hash) => navigate(routeName, hash);
     switch (name) {
       case 'home': return go('home');
-      case 'start-trip': return go('builder', 'step-1');
+      case 'start-trip': return go('builder', 'type');
       case 'run-demo': return go('demo');
       case 'rescue': return go('rescue');
       case 'plan-b': return go('rescue', 'plan-b');
