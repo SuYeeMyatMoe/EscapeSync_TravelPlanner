@@ -40,6 +40,16 @@
     .es-local-route { grid-template-columns:1fr; }
     .es-local-map-wrap { order:-1; }
   }
+  .es-crew-pills { display:flex; gap:6px; padding:5px; border-radius:100px; background:#101B20; border:1px solid rgba(155,168,176,.12); width:max-content; max-width:100%; flex-wrap:wrap; }
+  .es-crew-pills button { flex:none; }
+  .es-pref-row { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; padding:14px 0; border-bottom:1px solid rgba(155,168,176,.08); }
+  .es-pref-row:last-child { border-bottom:none; }
+  .es-level { display:flex; gap:4px; padding:4px; border-radius:100px; background:#0B1418; border:1px solid rgba(155,168,176,.1); }
+  .es-fair-mini { display:flex; flex-direction:column; gap:12px; }
+  @media (max-width: 768px) {
+    .es-crew-pills { width:100%; }
+    .es-crew-pills button { flex:1; min-width:calc(50% - 8px); }
+  }
 </style>
 </helmet>
 
@@ -58,7 +68,7 @@
   <div style="display:flex;align-items:center;gap:6px;padding:5px;border-radius:100px;background:rgba(16,27,32,.9);border:1px solid rgba(155,168,176,.12)">
     <button onClick="{{ goCreate }}" style="padding:9px 18px;border:none;border-radius:100px;font-size:12px;font-weight:700;letter-spacing:.06em;cursor:pointer;background:{{ tabCreateBg }};color:{{ tabCreateFg }}">CREATE TRIP</button>
     <button onClick="{{ goCrew }}" style="padding:9px 18px;border:none;border-radius:100px;font-size:12px;font-weight:700;letter-spacing:.06em;cursor:pointer;background:{{ tabCrewBg }};color:{{ tabCrewFg }}">YOUR CREW</button>
-    <button onClick="{{ goBalance }}" style="padding:9px 18px;border:none;border-radius:100px;font-size:12px;font-weight:700;letter-spacing:.06em;cursor:pointer;background:{{ tabBalanceBg }};color:{{ tabBalanceFg }}">BALANCE</button>
+    <button onClick="{{ goBalance }}" style="padding:9px 18px;border:none;border-radius:100px;font-size:12px;font-weight:700;letter-spacing:.06em;cursor:pointer;background:{{ tabBalanceBg }};color:{{ tabBalanceFg }}">COVERAGE</button>
   </div>
   <div style="display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;color:#9BA8B0">
     <span style="width:6px;height:6px;border-radius:50%;background:#00D6C9;animation:blip 1.8s ease-in-out infinite"></span>PHASE 2 PROTOTYPE
@@ -316,112 +326,115 @@
 
 <sc-if value="{{ onCrew }}" hint-placeholder-val="{{ false }}">
 <section data-screen-label="Your crew" style="padding:clamp(40px,6vw,72px) clamp(20px,4vw,40px) 90px">
-  <div style="max-width:1240px;margin:0 auto">
-    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:clamp(30px,4vw,44px)">
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#00D6C9;margin-bottom:14px">{{ tripKicker }}</div>
-        <h1 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(34px,5vw,52px);line-height:1.06;letter-spacing:-.03em;font-weight:700;margin:0">Your crew</h1>
-      </div>
-      <p style="font-size:15px;line-height:1.6;color:#9BA8B0;max-width:330px;margin:0">Tune each traveller once. Every plan and every rescue after this respects these dials.</p>
+  <div style="max-width:820px;margin:0 auto">
+    <div style="margin-bottom:22px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#00D6C9;margin-bottom:14px">{{ tripKicker }}</div>
+      <h1 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(34px,5vw,52px);line-height:1.06;letter-spacing:-.03em;font-weight:700;margin:0 0 12px">Who likes what?</h1>
+      <p style="font-size:16px;line-height:1.6;color:#9BA8B0;margin:0;max-width:52ch">One person at a time. Tap Low, Mid, or High — that is enough. The plan will follow these, not a 0–100 score.</p>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:18px">
-      <sc-for list="{{ crew }}" as="m" hint-placeholder-count="4">
-        <div style="padding:26px;border-radius:26px;background:#101B20;border:1px solid rgba(155,168,176,.11)">
-          <div style="display:flex;align-items:center;gap:16px;margin-bottom:26px">
-            <div style="width:66px;height:66px;flex:none;border-radius:50%;overflow:hidden;border:1px solid rgba(103,232,249,.3);box-shadow:0 0 0 4px rgba(103,232,249,.07)">
-              <image-slot id="{{ m.slotId }}" shape="circle" src="{{ m.photo }}" credit="{{ m.credit }}" credit-href="{{ m.creditHref }}" placeholder="{{ m.name }}"></image-slot>
-            </div>
-            <div style="min-width:0">
-              <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:600">{{ m.name }}</div>
-              <div style="font-size:13px;color:#9BA8B0">{{ m.blurb }}</div>
-            </div>
-          </div>
-
-          <div style="display:flex;flex-direction:column;gap:15px;margin-bottom:26px">
-            <sc-for list="{{ m.prefs }}" as="p" hint-placeholder-count="5">
-              <div>
-                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:7px">
-                  <span style="color:#9BA8B0;font-weight:600;letter-spacing:.02em">{{ p.label }}</span>
-                  <span style="font-family:'JetBrains Mono',monospace;color:{{ p.valueColor }}">{{ p.value }}</span>
-                </div>
-                <div onClick="{{ p.setFromTrack }}" style="position:relative;height:7px;border-radius:100px;background:rgba(155,168,176,.14);cursor:pointer">
-                  <div style="height:100%;border-radius:100px;background:{{ p.fill }};width:{{ p.pct }}"></div>
-                  <div style="position:absolute;top:-4px;left:{{ p.pct }};transform:translateX(-50%);width:15px;height:15px;border-radius:50%;background:#F8FAFC;box-shadow:0 1px 6px rgba(0,0,0,.6)"></div>
-                </div>
-              </div>
-            </sc-for>
-          </div>
-
-          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
-            <sc-for list="{{ m.settings }}" as="st" hint-placeholder-count="3">
-              <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px">
-                <span style="font-size:12px;color:#9BA8B0;font-weight:600">{{ st.label }}</span>
-                <div style="display:flex;gap:4px;padding:4px;border-radius:100px;background:#0B1418;border:1px solid rgba(155,168,176,.1)">
-                  <sc-for list="{{ st.options }}" as="o" hint-placeholder-count="3">
-                    <button onClick="{{ o.select }}" style="padding:6px 13px;border:none;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.04em;cursor:pointer;background:{{ o.bg }};color:{{ o.fg }}">{{ o.name }}</button>
-                  </sc-for>
-                </div>
-              </div>
-            </sc-for>
-          </div>
-
-          <div style="display:flex;flex-direction:column;gap:14px;padding-top:20px;border-top:1px solid rgba(155,168,176,.1)">
-            <div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#6EE7A8;margin-bottom:10px">MUST HAVE</div>
-              <div style="display:flex;flex-wrap:wrap;gap:8px">
-                <sc-for list="{{ m.must }}" as="t" hint-placeholder-count="2">
-                  <span style="padding:7px 13px;border-radius:100px;background:rgba(110,231,168,.1);border:1px solid rgba(110,231,168,.28);font-size:12px;color:#F8FAFC">{{ t }}</span>
-                </sc-for>
-                <span style="padding:7px 13px;border-radius:100px;border:1px dashed rgba(155,168,176,.3);font-size:12px;color:#9BA8B0">+ add</span>
-              </div>
-            </div>
-            <div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#FF6B5F;margin-bottom:10px">AVOID</div>
-              <div style="display:flex;flex-wrap:wrap;gap:8px">
-                <sc-for list="{{ m.avoid }}" as="t" hint-placeholder-count="1">
-                  <span style="padding:7px 13px;border-radius:100px;background:rgba(255,107,95,.09);border:1px solid rgba(255,107,95,.28);font-size:12px;color:#F8FAFC">{{ t }}</span>
-                </sc-for>
-                <span style="padding:7px 13px;border-radius:100px;border:1px dashed rgba(155,168,176,.3);font-size:12px;color:#9BA8B0">+ add</span>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div class="es-crew-pills" style="margin-bottom:22px">
+      <sc-for list="{{ crewTabs }}" as="t" hint-placeholder-count="4">
+        <button type="button" onClick="{{ t.select }}" style="padding:11px 20px;border:none;border-radius:100px;font-size:12px;font-weight:700;letter-spacing:.06em;cursor:pointer;background:{{ t.bg }};color:{{ t.fg }}">{{ t.label }}</button>
       </sc-for>
     </div>
 
-    <div style="margin-top:22px;padding:clamp(28px,4vw,44px);border-radius:26px;background:linear-gradient(160deg,#142329,#0B1418);border:1px solid rgba(223,255,0,.2);display:flex;flex-wrap:wrap;align-items:center;gap:clamp(24px,4vw,48px);justify-content:space-between">
-      <div style="display:flex;align-items:center;gap:28px;flex-wrap:wrap">
-        <div style="position:relative;width:150px;height:150px;flex:none">
-          <svg viewBox="0 0 150 150" style="width:150px;height:150px;transform:rotate(-90deg)">
-            <circle cx="75" cy="75" r="64" fill="none" stroke="rgba(155,168,176,.14)" stroke-width="10"/>
-            <circle cx="75" cy="75" r="64" fill="none" stroke="#DFFF00" stroke-width="10" stroke-linecap="round" stroke-dasharray="354 402" style="filter:drop-shadow(0 0 10px rgba(223,255,0,.5))"/>
-          </svg>
-          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
-            <span style="font-family:'Space Grotesk',sans-serif;font-size:42px;font-weight:700;letter-spacing:-.03em">88%</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#9BA8B0">MATCHED</span>
+    <div style="padding:clamp(22px,3vw,32px);border-radius:26px;background:#101B20;border:1px solid rgba(155,168,176,.11);margin-bottom:18px">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:16px">
+          <div style="width:66px;height:66px;flex:none;border-radius:50%;overflow:hidden;border:1px solid rgba(103,232,249,.3);box-shadow:0 0 0 4px rgba(103,232,249,.07)">
+            <image-slot id="{{ member.slotId }}" shape="circle" src="{{ member.photo }}" credit="{{ member.credit }}" credit-href="{{ member.creditHref }}" placeholder="{{ member.name }}"></image-slot>
+          </div>
+          <div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:600">{{ member.name }}</div>
+            <div style="font-size:14px;color:#9BA8B0">{{ member.blurb }}</div>
           </div>
         </div>
-        <div style="max-width:420px">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#DFFF00;margin-bottom:12px">GROUP COMPATIBILITY</div>
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:clamp(24px,3.4vw,32px);line-height:1.2;font-weight:600;margin-bottom:12px">88% — a strong fit</div>
-          <p style="font-size:15px;line-height:1.6;color:#9BA8B0;margin:0">EscapeSync balances everyone's preferences — not just the majority.</p>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;color:#67E8F9">{{ member.stepLabel }}</div>
+      </div>
+
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#9BA8B0;margin:22px 0 6px">THEY CARE ABOUT</div>
+      <div>
+        <sc-for list="{{ member.prefs }}" as="p" hint-placeholder-count="5">
+          <div class="es-pref-row">
+            <div>
+              <div style="font-size:15px;font-weight:600;margin-bottom:2px">{{ p.label }}</div>
+              <div style="font-size:12px;color:#9BA8B0">{{ p.hint }}</div>
+            </div>
+            <div class="es-level">
+              <sc-for list="{{ p.levels }}" as="o" hint-placeholder-count="3">
+                <button type="button" onClick="{{ o.select }}" style="padding:8px 14px;border:none;border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;background:{{ o.bg }};color:{{ o.fg }}">{{ o.name }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#9BA8B0;margin:22px 0 10px">HOW THEY TRAVEL</div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:8px">
+        <sc-for list="{{ member.settings }}" as="st" hint-placeholder-count="3">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px">
+            <span style="font-size:14px;color:#F8FAFC;font-weight:600">{{ st.label }}</span>
+            <div class="es-level">
+              <sc-for list="{{ st.options }}" as="o" hint-placeholder-count="3">
+                <button type="button" onClick="{{ o.select }}" style="padding:8px 14px;border:none;border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;background:{{ o.bg }};color:{{ o.fg }}">{{ o.name }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="padding-top:20px;margin-top:18px;border-top:1px solid rgba(155,168,176,.1)">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#6EE7A8;margin-bottom:10px">MUST HAVE · TAP TO TOGGLE</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+          <sc-for list="{{ member.mustChips }}" as="t" hint-placeholder-count="4">
+            <button type="button" onClick="{{ t.toggle }}" style="padding:8px 13px;border-radius:100px;border:1px solid {{ t.border }};background:{{ t.bg }};color:#F8FAFC;font-size:12px;cursor:pointer">{{ t.label }}</button>
+          </sc-for>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#FF6B5F;margin-bottom:10px">SKIP THESE · TAP TO TOGGLE</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <sc-for list="{{ member.avoidChips }}" as="t" hint-placeholder-count="3">
+            <button type="button" onClick="{{ t.toggle }}" style="padding:8px 13px;border-radius:100px;border:1px solid {{ t.border }};background:{{ t.bg }};color:#F8FAFC;font-size:12px;cursor:pointer">{{ t.label }}</button>
+          </sc-for>
         </div>
       </div>
-      <button onClick="{{ goBalance }}" style="padding:18px 32px;border:none;border-radius:100px;background:#DFFF00;color:#050A0D;font-size:13px;font-weight:800;letter-spacing:.12em;cursor:pointer;box-shadow:0 18px 46px -14px rgba(223,255,0,.5)" style-hover="background:#B9E900">SEE PREFERENCE BALANCE</button>
+    </div>
+
+    <div style="padding:22px;border-radius:22px;background:#0B1418;border:1px solid rgba(155,168,176,.11);margin-bottom:22px">
+      <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:14px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#9BA8B0">LIVE COVERAGE</div>
+        <div style="font-size:13px;color:#9BA8B0">Updates as you tap. {{ weakestHint }}</div>
+      </div>
+      <div class="es-fair-mini">
+        <sc-for list="{{ fairness }}" as="f" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="width:64px;flex:none;font-size:13px;font-weight:600">{{ f.name }}</span>
+            <div style="flex:1;height:8px;border-radius:100px;background:rgba(155,168,176,.13);overflow:hidden">
+              <div style="height:100%;width:{{ f.pct }};border-radius:100px;background:{{ f.fill }};transition:width .35s ease"></div>
+            </div>
+            <span style="width:40px;text-align:right;font-family:'Space Grotesk',sans-serif;font-weight:700;color:{{ f.color }}">{{ f.pct }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:12px">
+      <button type="button" onClick="{{ crewNext }}" style="padding:18px 32px;border:none;border-radius:100px;background:#DFFF00;color:#050A0D;font-size:13px;font-weight:800;letter-spacing:.12em;cursor:pointer;box-shadow:0 18px 46px -14px rgba(223,255,0,.5)" style-hover="background:#B9E900">{{ crewNextLabel }}</button>
+      <button type="button" onClick="{{ goBalance }}" style="padding:18px 26px;border-radius:100px;border:1px solid rgba(248,250,252,.2);background:rgba(248,250,252,.04);color:#F8FAFC;font-size:13px;font-weight:700;letter-spacing:.1em;cursor:pointer" style-hover="border-color:rgba(248,250,252,.45)">SKIP TO COVERAGE</button>
     </div>
   </div>
 </section>
 </sc-if>
 
 <sc-if value="{{ onBalance }}" hint-placeholder-val="{{ false }}">
-<section data-screen-label="Preference balance" style="padding:clamp(40px,6vw,72px) clamp(20px,4vw,40px) 100px">
-  <div style="max-width:900px;margin:0 auto">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#00D6C9;margin-bottom:14px">FAIRNESS ENGINE</div>
-    <h1 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(34px,5vw,52px);line-height:1.06;letter-spacing:-.03em;font-weight:700;margin:0 0 14px">Preference balance</h1>
-    <p style="font-size:16px;line-height:1.6;color:#9BA8B0;max-width:540px;margin:0 0 clamp(36px,5vw,52px)">How much of the current plan reflects each person. We keep this visible so nobody has to keep score.</p>
+<section data-screen-label="Coverage" style="padding:clamp(40px,6vw,72px) clamp(20px,4vw,40px) 100px">
+  <div style="max-width:820px;margin:0 auto">
+    <button type="button" onClick="{{ goCrew }}" style="display:inline-flex;align-items:center;gap:8px;margin-bottom:22px;padding:10px 16px;border-radius:100px;background:rgba(16,27,32,.9);border:1px solid rgba(155,168,176,.14);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;color:#9BA8B0;cursor:pointer" style-hover="border-color:rgba(0,214,201,.5);color:#67E8F9"><span style="font-size:12px">◀</span>CHANGE TASTES</button>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#00D6C9;margin-bottom:14px">LAST CHECK BEFORE THE PLAN</div>
+    <h1 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(34px,5vw,52px);line-height:1.06;letter-spacing:-.03em;font-weight:700;margin:0 0 12px">Is everyone covered?</h1>
+    <p style="font-size:16px;line-height:1.6;color:#9BA8B0;max-width:54ch;margin:0 0 clamp(28px,4vw,40px)">This is not a score you have to fix. It is a preview of whose tastes the first itinerary will lean toward. You can continue as-is.</p>
 
-    <div style="padding:clamp(26px,4vw,38px);border-radius:26px;background:#101B20;border:1px solid rgba(155,168,176,.11);display:flex;flex-direction:column;gap:26px">
+    <div style="padding:clamp(22px,3vw,32px);border-radius:26px;background:#101B20;border:1px solid rgba(155,168,176,.11);display:flex;flex-direction:column;gap:22px">
       <sc-for list="{{ fairness }}" as="f" hint-placeholder-count="4">
         <div style="display:flex;align-items:center;gap:clamp(14px,2.5vw,22px)">
           <div style="width:48px;height:48px;flex:none;border-radius:50%;overflow:hidden;border:1px solid rgba(103,232,249,.25)">
@@ -432,48 +445,41 @@
               <span style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600">{{ f.name }}</span>
               <span style="font-size:13px;color:#9BA8B0">{{ f.note }}</span>
             </div>
-            <div style="height:14px;border-radius:100px;background:rgba(155,168,176,.13);overflow:hidden">
-              <div style="height:100%;border-radius:100px;width:{{ f.pct }};background:{{ f.fill }};transform-origin:left;animation:growbar .9s cubic-bezier(.2,.8,.2,1) both"></div>
+            <div style="height:12px;border-radius:100px;background:rgba(155,168,176,.13);overflow:hidden">
+              <div style="height:100%;border-radius:100px;width:{{ f.pct }};background:{{ f.fill }};transition:width .35s ease"></div>
             </div>
           </div>
-          <div style="width:74px;text-align:right;flex:none">
-            <span style="font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;color:{{ f.color }}">{{ f.pct }}</span>
+          <div style="width:64px;text-align:right;flex:none">
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:{{ f.color }}">{{ f.pct }}</span>
           </div>
         </div>
       </sc-for>
     </div>
 
-    <div style="margin-top:20px;padding:clamp(24px,4vw,34px);border-radius:26px;background:linear-gradient(160deg,rgba(0,214,201,.10),rgba(11,20,24,.9));border:1px solid rgba(0,214,201,.28);display:flex;flex-wrap:wrap;gap:clamp(20px,3vw,30px);align-items:center">
-      <div style="position:relative;width:92px;height:104px;flex:none;animation:floaty 5s ease-in-out infinite">
-        <div style="position:absolute;left:50%;top:4px;transform:translateX(-50%);width:2px;height:16px;background:#B9E900"></div>
-        <div style="position:absolute;left:50%;top:-4px;transform:translateX(-50%);width:12px;height:12px;border-radius:50%;background:#DFFF00;box-shadow:0 0 16px 4px rgba(223,255,0,.55);animation:pulseglow 2.6s ease-in-out infinite"></div>
-        <div style="position:absolute;left:0;top:18px;width:92px;height:78px;border-radius:30px;background:linear-gradient(165deg,#1B2E36,#0B1418);border:1px solid rgba(103,232,249,.24);box-shadow:inset 0 1px 0 rgba(248,250,252,.14)"></div>
-        <div style="position:absolute;left:11px;top:32px;width:70px;height:46px;border-radius:23px;background:#050A0D;border:1px solid rgba(103,232,249,.18);display:flex;align-items:center;justify-content:center;gap:12px">
-          <span style="width:12px;height:12px;border-radius:50%;background:#67E8F9;box-shadow:0 0 12px 2px rgba(103,232,249,.75)"></span>
-          <span style="width:12px;height:12px;border-radius:50%;background:#67E8F9;box-shadow:0 0 12px 2px rgba(103,232,249,.75)"></span>
-        </div>
-      </div>
+    <sc-if value="{{ showFairWarn }}" hint-placeholder-val="{{ true }}">
+    <div style="margin-top:18px;padding:clamp(22px,3vw,30px);border-radius:24px;background:linear-gradient(160deg,rgba(0,214,201,.10),rgba(11,20,24,.9));border:1px solid rgba(0,214,201,.28);display:flex;flex-wrap:wrap;gap:20px;align-items:center">
       <div style="flex:1;min-width:240px">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#67E8F9;margin-bottom:12px">PIP NOTICED SOMETHING</div>
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:clamp(20px,2.8vw,26px);line-height:1.3;font-weight:600;margin-bottom:10px">Chris's preferences have been underrepresented.</div>
-        <p style="font-size:15px;line-height:1.6;color:#9BA8B0;margin:0">EscapeSync will slightly prioritize Chris in the next recommendation.</p>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#67E8F9;margin-bottom:10px">PIP'S READ</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:clamp(20px,2.8vw,26px);line-height:1.3;font-weight:600;margin-bottom:8px">{{ pipTitle }}</div>
+        <p style="font-size:15px;line-height:1.6;color:#9BA8B0;margin:0">{{ pipBody }}</p>
+      </div>
+    </div>
+    </sc-if>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:14px;margin-top:18px">
+      <div style="padding:22px;border-radius:22px;background:#101B20;border:1px solid rgba(155,168,176,.11)">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#9BA8B0;margin-bottom:10px">FIRST STOPS WILL LEAN</div>
+        <div style="font-size:15px;line-height:1.55">{{ leanText }}</div>
+      </div>
+      <div style="padding:22px;border-radius:22px;background:#101B20;border:1px solid rgba(155,168,176,.11)">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#9BA8B0;margin-bottom:10px">STILL PROTECTED</div>
+        <div style="font-size:15px;line-height:1.55">{{ protectText }}</div>
       </div>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:16px;margin-top:20px">
-      <div style="padding:24px;border-radius:22px;background:#101B20;border:1px solid rgba(155,168,176,.11)">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#9BA8B0;margin-bottom:12px">NEXT PICK LEANS TOWARD</div>
-        <div style="font-size:15px;line-height:1.6">Low-cost local food near Jonker Street — Chris's must-have, still inside Alice's café radius.</div>
-      </div>
-      <div style="padding:24px;border-radius:22px;background:#101B20;border:1px solid rgba(155,168,176,.11)">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#9BA8B0;margin-bottom:12px">STILL PROTECTED</div>
-        <div style="font-size:15px;line-height:1.6">David's low-walking limit and Ben's golden-hour photo stop stay untouched.</div>
-      </div>
-    </div>
-
-    <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:32px">
-      <button onClick="{{ finishTrip }}" style="padding:18px 32px;border:none;border-radius:100px;background:#DFFF00;color:#050A0D;font-size:13px;font-weight:800;letter-spacing:.12em;cursor:pointer;box-shadow:0 18px 46px -14px rgba(223,255,0,.5)" style-hover="background:#B9E900">CONTINUE TO ITINERARY</button>
-      <button onClick="{{ goCrew }}" style="padding:18px 30px;border-radius:100px;border:1px solid rgba(248,250,252,.2);background:rgba(248,250,252,.04);color:#F8FAFC;font-size:13px;font-weight:700;letter-spacing:.12em;cursor:pointer" style-hover="border-color:rgba(248,250,252,.45)">ADJUST THE CREW</button>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:28px">
+      <button type="button" onClick="{{ finishTrip }}" style="padding:18px 32px;border:none;border-radius:100px;background:#DFFF00;color:#050A0D;font-size:13px;font-weight:800;letter-spacing:.12em;cursor:pointer;box-shadow:0 18px 46px -14px rgba(223,255,0,.5)" style-hover="background:#B9E900">LOOKS GOOD · BUILD THE PLAN</button>
+      <button type="button" onClick="{{ goWeakCrew }}" style="padding:18px 26px;border-radius:100px;border:1px solid rgba(248,250,252,.2);background:rgba(248,250,252,.04);color:#F8FAFC;font-size:13px;font-weight:700;letter-spacing:.1em;cursor:pointer" style-hover="border-color:rgba(248,250,252,.45)">{{ adjustLabel }}</button>
     </div>
   </div>
 </section>
@@ -483,6 +489,39 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900}}">
 const PREFS = ["Food", "Adventure", "Culture", "Nightlife", "Relaxation"];
+const PREF_HINT = { Food: "Meals and snacks", Adventure: "Moving around", Culture: "Museums and streets", Nightlife: "Evenings out", Relaxation: "Slow time" };
+const PREF_LEVEL = { Low: 28, Mid: 58, High: 90 };
+const TAG_POOL = {
+  Alice: { must: ["Café hopping", "Local desserts", "Night markets", "Brunch"], avoid: ["Long bus rides", "Spicy food"] },
+  Ben: { must: ["Golden hour spots", "Heritage streets", "Museums", "Rooftops"], avoid: ["Crowded malls", "Nightclubs"] },
+  Chris: { must: ["Street food", "Free entry sites", "Hawker stalls"], avoid: ["Fine dining", "Souvenir shops"] },
+  David: { must: ["Riverside cafés", "Short walks", "Shade"], avoid: ["Hiking trails", "Stairs"] }
+};
+const prefLevel = (v) => v >= 75 ? "High" : v >= 42 ? "Mid" : "Low";
+const scoreCrew = (crew) => {
+  const avg = {};
+  PREFS.forEach((k) => { avg[k] = crew.reduce((a, m) => a + Number(m.prefs[k] || 0), 0) / crew.length; });
+  return crew.map((m) => {
+    let cover = 0, w = 0;
+    PREFS.forEach((k) => {
+      const love = Number(m.prefs[k] || 0) / 100;
+      cover += love * (48 + avg[k] * 0.42);
+      w += love;
+    });
+    let score = cover / (w || 1);
+    if (m.budgetSens === "High") score -= 7;
+    if (m.walking === "Low") score -= 5;
+    if (m.pace === "Slow") score -= 2;
+    if (m.budgetSens === "Low") score += 3;
+    score = Math.round(Math.max(54, Math.min(96, score)));
+    const top = PREFS.slice().sort((a, b) => m.prefs[b] - m.prefs[a])[0];
+    let note = top + " comes through";
+    if (score < 72) note = "Gets less of this first plan";
+    else if (m.walking === "Low") note = "Walking stays short";
+    else if (m.budgetSens === "High") note = "Needs cheaper stops";
+    return { name: m.name, pct: score, note };
+  });
+};
 const ES_TRIP = window.EscapeSyncApp ? EscapeSyncApp.loadState() : {};
 const ES_HASH = window.location.hash.replace(/^#/, "");
 const ES_STEP_MATCH = /^step-([1-5])$/.test(ES_HASH) ? Number(ES_HASH.split("-")[1]) : null;
@@ -544,7 +583,8 @@ class Component extends DCLogic {
       { name: "David", blurb: "Low walking + relaxation", prefs: { Food: 70, Adventure: 30, Culture: 55, Nightlife: 25, Relaxation: 95 },
         walking: "Low", budgetSens: "Low", pace: "Slow",
         must: ["Riverside cafés", "Short walks"], avoid: ["Hiking trails"] }
-    ]
+    ],
+    crewIndex: 0
   };
 
   componentDidUpdate() {
@@ -616,7 +656,11 @@ class Component extends DCLogic {
     else window.location.href = "EscapeSync Phase 3.html";
   };
 
-  go = (screen) => { this.setState({ screen }); window.scrollTo(0, 0); };
+  go = (screen) => {
+    this.setState({ screen });
+    if (screen === "crew" || screen === "balance") window.location.hash = screen;
+    window.scrollTo(0, 0);
+  };
 
   selectTripType = (type) => {
     const updates = { tripType: type, step: 1 };
@@ -660,8 +704,22 @@ class Component extends DCLogic {
     this.setState({ crew });
   };
 
+  setPrefLevel = (i, key, level) => () => {
+    const crew = this.state.crew.map((m, idx) => idx === i ? { ...m, prefs: { ...m.prefs, [key]: PREF_LEVEL[level] } } : m);
+    this.setState({ crew });
+  };
+
   setSetting = (i, field, value) => () => {
     const crew = this.state.crew.map((m, idx) => idx === i ? { ...m, [field]: value } : m);
+    this.setState({ crew });
+  };
+
+  toggleTag = (i, field, tag) => () => {
+    const crew = this.state.crew.map((m, idx) => {
+      if (idx !== i) return m;
+      const has = m[field].indexOf(tag) !== -1;
+      return { ...m, [field]: has ? m[field].filter((t) => t !== tag) : m[field].concat(tag) };
+    });
     this.setState({ crew });
   };
 
@@ -756,40 +814,69 @@ class Component extends DCLogic {
     });
 
     const pic = (name) => (window.EscapeSyncApp && EscapeSyncApp.photoFor(name)) || {};
-    const crew = s.crew.map((m, i) => ({
-      name: m.name, blurb: m.blurb, must: m.must, avoid: m.avoid,
-      slotId: "crew2-" + m.name.toLowerCase(),
-      photo: pic(m.name).src, credit: pic(m.name).credit, creditHref: pic(m.name).creditHref,
-      prefs: PREFS.map(key => {
-        const v = m.prefs[key];
-        return { label: key, value: v, pct: v + "%",
-          fill: v >= 80 ? "linear-gradient(90deg,#B9E900,#DFFF00)" : "linear-gradient(90deg,#00D6C9,#67E8F9)",
-          valueColor: v >= 80 ? "#DFFF00" : "#67E8F9",
-          setFromTrack: this.setPref(i, key) };
+    const idx = Math.max(0, Math.min(s.crew.length - 1, s.crewIndex || 0));
+    const chip = (i, field, tag, on) => ({
+      label: (on ? "" : "+ ") + tag,
+      toggle: this.toggleTag(i, field, tag),
+      bg: on ? (field === "must" ? "rgba(110,231,168,.1)" : "rgba(255,107,95,.09)") : "transparent",
+      border: on ? (field === "must" ? "rgba(110,231,168,.28)" : "rgba(255,107,95,.28)") : "rgba(155,168,176,.28)"
+    });
+    const memberRaw = s.crew[idx];
+    const pool = TAG_POOL[memberRaw.name] || { must: memberRaw.must, avoid: memberRaw.avoid };
+    const member = {
+      name: memberRaw.name, blurb: memberRaw.blurb,
+      stepLabel: "PERSON " + (idx + 1) + " OF " + s.crew.length,
+      slotId: "crew2-" + memberRaw.name.toLowerCase(),
+      photo: pic(memberRaw.name).src, credit: pic(memberRaw.name).credit, creditHref: pic(memberRaw.name).creditHref,
+      prefs: PREFS.map((key) => {
+        const current = prefLevel(memberRaw.prefs[key]);
+        return {
+          label: key, hint: PREF_HINT[key],
+          levels: ["Low", "Mid", "High"].map((name) => ({
+            name, select: this.setPrefLevel(idx, key, name),
+            bg: current === name ? "#DFFF00" : "transparent",
+            fg: current === name ? "#050A0D" : "#9BA8B0"
+          }))
+        };
       }),
       settings: [
-        { label: "Walking tolerance", options: this.segment(i, "walking", m.walking, ["Low", "Med", "High"]) },
-        { label: "Budget sensitivity", options: this.segment(i, "budgetSens", m.budgetSens, ["Low", "Med", "High"]) },
-        { label: "Travel pace", options: this.segment(i, "pace", m.pace, ["Slow", "Balanced", "Fast"]) }
-      ]
+        { label: "Walking", options: this.segment(idx, "walking", memberRaw.walking, ["Low", "Med", "High"]) },
+        { label: "Budget", options: this.segment(idx, "budgetSens", memberRaw.budgetSens, ["Low", "Med", "High"]) },
+        { label: "Pace", options: this.segment(idx, "pace", memberRaw.pace, ["Slow", "Balanced", "Fast"]) }
+      ],
+      mustChips: pool.must.map((tag) => chip(idx, "must", tag, memberRaw.must.indexOf(tag) !== -1)),
+      avoidChips: pool.avoid.map((tag) => chip(idx, "avoid", tag, memberRaw.avoid.indexOf(tag) !== -1))
+    };
+    const crewTabs = s.crew.map((m, i) => ({
+      label: m.name,
+      select: () => this.setState({ crewIndex: i }),
+      bg: i === idx ? "#DFFF00" : "transparent",
+      fg: i === idx ? "#050A0D" : "#9BA8B0"
     }));
 
-    const fairnessData = [
-      ["Alice", 91, "Cafés and food stops well covered"],
-      ["Ben", 84, "Two photo windows locked in"],
-      ["Chris", 66, "Budget picks are thin so far"],
-      ["David", 82, "Walking kept short every day"]
-    ];
-    const fairness = fairnessData.map(([name, pct, note]) => ({
-      name, note, pct: pct + "%", slotId: "crew2-" + name.toLowerCase(),
-      photo: pic(name).src, credit: pic(name).credit, creditHref: pic(name).creditHref,
-      fill: pct < 70 ? "linear-gradient(90deg,#FFB84D,#DFFF00)" : "linear-gradient(90deg,#00D6C9,#DFFF00)",
-      color: pct < 70 ? "#FFB84D" : "#F8FAFC"
-    }));
+    const scored = scoreCrew(s.crew);
+    const fairness = scored.map((row) => {
+      const p = pic(row.name);
+      return {
+        name: row.name, note: row.note, pct: row.pct + "%",
+        slotId: "crew2-" + row.name.toLowerCase(),
+        photo: p.src, credit: p.credit, creditHref: p.creditHref,
+        fill: row.pct < 72 ? "linear-gradient(90deg,#FFB84D,#DFFF00)" : "linear-gradient(90deg,#00D6C9,#DFFF00)",
+        color: row.pct < 72 ? "#FFB84D" : "#F8FAFC"
+      };
+    });
+    const weakest = scored.reduce((a, b) => a.pct <= b.pct ? a : b);
+    const weakestIdx = s.crew.findIndex((m) => m.name === weakest.name);
+    const nextIdx = idx + 1;
+    const nextName = nextIdx < s.crew.length ? s.crew[nextIdx].name : "";
 
     return {
       onCreate: s.screen === "create", onCrew: s.screen === "crew", onBalance: s.screen === "balance",
       goCreate: () => this.go("create"), goCrew: () => this.go("crew"), goBalance: () => this.go("balance"),
+      goWeakCrew: () => { this.setState({ screen: "crew", crewIndex: Math.max(0, weakestIdx) }); window.location.hash = "crew"; window.scrollTo(0, 0); },
+      crewNext: nextIdx < s.crew.length ? () => { this.setState({ crewIndex: nextIdx }); window.scrollTo(0, 0); } : () => this.go("balance"),
+      crewNextLabel: nextIdx < s.crew.length ? "NEXT · " + nextName.toUpperCase() : "CHECK THE SPLIT",
+      member, crewTabs,
       tabCreateBg: tc.bg, tabCreateFg: tc.fg, tabCrewBg: tw.bg, tabCrewFg: tw.fg, tabBalanceBg: tb.bg, tabBalanceFg: tb.fg,
       step: s.step, stepLabel: s.step > 0 ? String(s.step) : "0",
       stepName: s.step === 0 ? "Local or Foreign" : (stepNames[s.step - 1] || stepNames[0]),
@@ -823,7 +910,14 @@ class Component extends DCLogic {
       perDay: Math.round(s.budget / 3),
       buffer: Math.round(s.budget * 0.12) * s.travellers,
       styleOptions, styleCount: s.styles.length,
-      crew, fairness, finishTrip: this.finishTrip,
+      fairness, finishTrip: this.finishTrip,
+      weakestHint: weakest.pct < 72 ? weakest.name + " is short so far — that's okay." : "Everyone is in a good range.",
+      showFairWarn: weakest.pct < 75,
+      pipTitle: weakest.name + " gets less of this first plan.",
+      pipBody: "We'll lean the first recommendations toward them. Or tap Change tastes and raise their Highs.",
+      adjustLabel: "TWEAK " + weakest.name.toUpperCase(),
+      leanText: weakest.name + "'s must-haves first — still inside what the others marked High.",
+      protectText: s.crew.filter((m) => m.walking === "Low" || m.budgetSens === "High").map((m) => m.name + (m.walking === "Low" ? " · short walks" : " · cheaper stops")).join(" · ") || "Walking caps and budget ceilings stay on.",
       tripKicker: isLocal ? 
         `${s.origin.toUpperCase()} → ${s.destination.toUpperCase()} · ${s.purpose.toUpperCase()} · 3 DAYS · RM${s.budget} / PERSON` :
         `${s.origin.toUpperCase()} → ${s.destination.toUpperCase()} · 3 DAYS · RM${s.budget} / PERSON`
