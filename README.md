@@ -253,8 +253,6 @@ flowchart LR
   api --> weather
 ```
 
-API aligned to screens that already exist: `POST /trips`, `GET /trips/{id}`, crew, itinerary, budget, options, `POST .../rescue` + accept, `POST /pip/turn`, share payload.
-
 Tables: `users`, `trips`, `trip_members`, `itinerary_stops`, `expenses`, `recommendations`, `rescue_events`, `alerts`.
 
 ### Build plan and scope
