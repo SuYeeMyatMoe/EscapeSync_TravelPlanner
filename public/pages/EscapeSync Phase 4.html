@@ -68,13 +68,8 @@
     <a href="EscapeSync Phase 1.html" data-nav-home="1" style="text-decoration:none;color:inherit;display:inline-flex"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;letter-spacing:-.3px">Escape<span style="color:#DFFF00">Sync</span></span></a>
     <span style="margin-left:10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#9BA8B0">3D MAP EXPLORER</span>
   </div>
-  <div style="display:flex;align-items:center;gap:6px;padding:5px;border-radius:100px;background:rgba(16,27,32,.9);border:1px solid rgba(155,168,176,.12)">
-    <button onClick="{{ goWeb }}" style="padding:9px 18px;border:none;border-radius:100px;font-size:12px;font-weight:700;letter-spacing:.06em;cursor:pointer;background:{{ tabWebBg }};color:{{ tabWebFg }}">WEB</button>
-    <button onClick="{{ goMobile }}" style="padding:9px 18px;border:none;border-radius:100px;font-size:12px;font-weight:700;letter-spacing:.06em;cursor:pointer;background:{{ tabMobBg }};color:{{ tabMobFg }}">MOBILE</button>
-  </div>
 </nav>
 
-<sc-if value="{{ onWeb }}" hint-placeholder-val="{{ true }}">
 <section data-screen-label="3D map explorer" style="padding:clamp(24px,3vw,36px) clamp(20px,3vw,36px) 60px;animation:risein .4s ease both">
   <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:22px">
     <div>
@@ -187,89 +182,6 @@
     </div>
   </div>
 </section>
-</sc-if>
-
-<sc-if value="{{ onMobile }}" hint-placeholder-val="{{ false }}">
-<section data-screen-label="Mobile 3D map" style="padding:clamp(28px,4vw,52px) 20px 70px;display:flex;flex-wrap:wrap;gap:44px;justify-content:center;align-items:flex-start;animation:risein .4s ease both">
-  <div style="width:390px;height:820px;flex:none;position:relative;border-radius:52px;padding:11px;background:linear-gradient(160deg,#22343C,#0B1418);box-shadow:0 60px 120px -40px rgba(0,0,0,.95),inset 0 1px 0 rgba(248,250,252,.14)">
-    <div style="position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:#050A0D">
-
-      <div ref="{{ mapMobRef }}" class="es-map dark"></div>
-
-
-      <div style="position:absolute;left:0;right:0;top:0;z-index:2;padding:14px 18px 16px;background:linear-gradient(180deg,rgba(5,10,13,.92),rgba(5,10,13,0))">
-        <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;color:#9BA8B0;margin-bottom:14px"><span>9:41</span><span>◍ ◈ ▮</span></div>
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#F8FAFC">DAY 2 · MELAKA</div>
-          <div style="width:30px;height:30px;border-radius:50%;overflow:hidden;border:1px solid rgba(103,232,249,.3)"><image-slot id="crew2-alice" shape="circle" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&amp;fit=crop&amp;w=200&amp;q=80" credit="Photo by Michael Dam on Unsplash" credit-href="https://unsplash.com/@michaeldam" placeholder="A"></image-slot></div>
-        </div>
-        <div style="display:flex;gap:5px;padding:4px;border-radius:100px;background:rgba(16,27,32,.85);backdrop-filter:blur(10px);border:1px solid rgba(155,168,176,.14);width:max-content">
-          <sc-for list="{{ mobileTabs }}" as="t" hint-placeholder-count="2">
-            <button onClick="{{ t.select }}" style="padding:9px 26px;border:none;border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;cursor:pointer;background:{{ t.bg }};color:{{ t.fg }}">{{ t.name }}</button>
-          </sc-for>
-        </div>
-      </div>
-
-      <sc-if value="{{ mobileList }}" hint-placeholder-val="{{ false }}">
-      <div style="position:absolute;left:0;right:0;top:132px;bottom:0;z-index:3;padding:14px;background:rgba(5,10,13,.92);backdrop-filter:blur(16px);overflow-y:auto;animation:risein .3s ease both">
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <sc-for list="{{ stops }}" as="s" hint-placeholder-count="5">
-            <button onClick="{{ s.selectMap }}" style="display:flex;align-items:center;gap:13px;text-align:left;cursor:pointer;padding:14px;border-radius:18px;background:#101B20;border:1px solid {{ s.listBorder }};color:#F8FAFC">
-              <span style="width:44px;height:44px;flex:none;border-radius:14px;background:{{ s.bg }};color:#050A0D;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700">{{ s.n }}</span>
-              <span style="flex:1;min-width:0">
-                <span style="display:block;font-size:14.5px;font-weight:600">{{ s.name }}</span>
-                <span style="display:block;font-size:11.5px;color:#9BA8B0">{{ s.time }} · {{ s.distance }} · {{ s.travel }}</span>
-              </span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#6EE7A8">{{ s.fit }}</span>
-            </button>
-          </sc-for>
-        </div>
-      </div>
-      </sc-if>
-
-      <sc-if value="{{ mobileMap }}" hint-placeholder-val="{{ true }}">
-      <div style="position:absolute;right:16px;top:190px;z-index:2;display:flex;flex-direction:column;gap:10px">
-        <sc-for list="{{ mapControls }}" as="c" hint-placeholder-count="4">
-          <button onClick="{{ c.action }}" style="width:44px;height:44px;border-radius:50%;background:rgba(5,10,13,.78);backdrop-filter:blur(10px);border:1px solid rgba(155,168,176,.2);color:{{ c.color }};font-size:15px;cursor:pointer">{{ c.glyph }}</button>
-        </sc-for>
-      </div>
-      </sc-if>
-
-      <div style="position:absolute;left:14px;right:14px;bottom:16px;z-index:2;padding:18px;border-radius:26px;background:rgba(11,20,24,.94);backdrop-filter:blur(22px);border:1px solid rgba(0,214,201,.3);box-shadow:0 30px 70px -24px rgba(0,0,0,.95)">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px">
-          <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:#DFFF00">NEXT STOP</span>
-          <span style="display:flex;align-items:center;gap:7px;font-size:11px;color:#9BA8B0"><span style="width:6px;height:6px;border-radius:50%;background:#00D6C9;animation:blip 1.6s ease-in-out infinite"></span>ON TRACK</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:14px">
-          <div style="width:52px;height:52px;flex:none;border-radius:16px;overflow:hidden"><image-slot id="{{ nextSlotKey }}" shape="rounded" radius="16" src="{{ nextPhoto }}" credit="{{ nextCredit }}" credit-href="{{ nextCreditHref }}" placeholder="{{ nextName }}"></image-slot></div>
-          <div style="flex:1;min-width:0">
-            <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;margin-bottom:3px">{{ nextName }}</div>
-            <div style="font-size:12px;color:#9BA8B0">{{ nextMeta }}</div>
-          </div>
-          <button onClick="{{ openStop3 }}" style="padding:14px 20px;border:none;border-radius:100px;background:#DFFF00;color:#050A0D;font-size:11px;font-weight:800;letter-spacing:.1em;cursor:pointer">DETAILS</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div style="max-width:340px;min-width:260px;display:flex;flex-direction:column;gap:16px">
-    <div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#00D6C9;margin-bottom:12px">MOBILE · DAY 2</div>
-      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:30px;line-height:1.1;letter-spacing:-.03em;font-weight:700;margin:0 0 12px">Same route, one thumb</h2>
-      <p style="font-size:14.5px;line-height:1.6;color:#9BA8B0;margin:0">The portrait map keeps the next stop pinned at the bottom, controls within thumb reach, and the full list one tap away.</p>
-    </div>
-    <div style="padding:20px;border-radius:22px;background:#101B20;border:1px solid rgba(155,168,176,.11);display:flex;flex-direction:column;gap:14px">
-      <sc-for list="{{ mobileNotes }}" as="n" hint-placeholder-count="4">
-        <div style="display:flex;gap:12px;align-items:flex-start">
-          <span style="width:30px;height:30px;flex:none;border-radius:11px;background:rgba(103,232,249,.12);display:flex;align-items:center;justify-content:center;color:#67E8F9;font-size:14px">{{ n.glyph }}</span>
-          <span style="font-size:13px;line-height:1.55;color:#9BA8B0"><span style="color:#F8FAFC;font-weight:600">{{ n.title }}</span> — {{ n.text }}</span>
-        </div>
-      </sc-for>
-    </div>
-    <button onClick="{{ goWeb }}" style="padding:16px 26px;border-radius:100px;border:1px solid rgba(248,250,252,.2);background:rgba(248,250,252,.04);color:#F8FAFC;font-size:12px;font-weight:700;letter-spacing:.12em;cursor:pointer" style-hover="border-color:rgba(248,250,252,.45)">SEE THE WEB EXPLORER</button>
-  </div>
-</section>
-</sc-if>
 
 </div>
 </x-dc>
@@ -315,15 +227,12 @@ const CONTROLS = [
 
 class Component extends DCLogic {
   state = {
-    screen: window.location.hash === "#mobile" ? "mobile" : "web",
     mode: "3D",
     transport: "Walk",
-    selected: window.location.hash === "#stop-3" ? 3 : window.location.hash === "#compare" ? 4 : 0,
-    mobileTab: "MAP"
+    selected: window.location.hash === "#stop-3" ? 3 : window.location.hash === "#compare" ? 4 : 0
   };
 
   mapWebRef = React.createRef();
-  mapMobRef = React.createRef();
 
   popupHtml(st) {
     return '<div class="es-pop"><img src="' + st.photo + '" alt=""><div class="b">'
@@ -335,7 +244,7 @@ class Component extends DCLogic {
   // The live map is stashed on the container element itself, so every call
   // site resolves it from the ref at call time — no stale cache.
   live() {
-    return [this.mapWebRef.current, this.mapMobRef.current]
+    return [this.mapWebRef.current]
       .filter(el => el && el._esMap && document.contains(el))
       .map(el => el._esMap);
   }
@@ -413,7 +322,6 @@ class Component extends DCLogic {
     if (!this.state) return;
     if (!window.L) { this._later(120, this.ensure); return; }
     this.build(this.mapWebRef.current);
-    this.build(this.mapMobRef.current);
   };
 
   componentDidMount() { this.ensure(); [80, 250, 700, 1400].forEach(t => this._later(t, this.ensure)); window.addEventListener("resize", this.ensure); }
@@ -422,7 +330,7 @@ class Component extends DCLogic {
     window.removeEventListener("resize", this.ensure);
     this._timers.forEach(clearTimeout);
     this._timers = [];
-    [this.mapWebRef.current, this.mapMobRef.current].forEach(el => {
+    [this.mapWebRef.current].forEach(el => {
       if (el && el._esMap) { try { el._esMap.map.remove(); } catch (e) {} el._esMap = null; }
     });
   }
